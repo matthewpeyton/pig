@@ -6,7 +6,7 @@ class pig():
         self.bank = []
         self.current_score = 0
 
-    def end_turn(self, num):
+    def end_turn(self, num): # append current_score to the bank and reset it to 0
         self.total += self.current_score
         self.bank.append(self.current_score)
         self.current_score = 0
@@ -22,18 +22,19 @@ class pig():
         else: self.current_score = 0
         return last_roll, self.current_score
 
-    def piggy_bank(self):
+    def piggy_bank(self): # returns the list of turn results and the total score
         return self.bank, self.total
 
-    def new_game(self):
+    def new_game(self): # start a new game - return all values to 0/null
+        # couldn't I just run __init__ again??
         self.total = 0
         self.bank = []
         self.current_score = 0
 
 class pig_stats():
-    def __init__(self):    
+    def __init__(self):
         self.pig = pig()
-        
+
     def play_game(self, max_score, turn_target):
         while self.pig.piggy_bank()[1] < max_score:
             this_roll = self.pig.roll_handler()
@@ -47,38 +48,34 @@ class pig_stats():
                 if this_roll[1] > turn_target:
                     self.pig.end_turn(this_roll[1])
                     # print('rolled a ' + str(this_roll[1]))
-            
-            # if self.pig.piggy_bank()[1] + this_roll[1] >= max_score:
-            #     self.pig.end_turn(this_roll[1])
-        
+
         return self.pig.piggy_bank()
 
     def average(self, list):
         numerator = 0
         denominator = len(list)
-        print(denominator)
         for i in range(0, denominator):
             numerator += list[i-1]
-            print('current num '+str(numerator))
         avg = numerator / denominator
 
         return avg
 
+    def new_game(self):
+        self.pig.new_game()
+
 if __name__ == "__main__":
     pig_stats = pig_stats()
 
-    this_game = pig_stats.play_game(100, 10)
+    averages = []
+    iteration = 0
+    iterations = 100000 # how many games do you want to average out?
 
-    print(this_game[0])
-    print(pig_stats.average(this_game[0]))
-    # print(pig_stats.play_game(100, 4)[0])
-    # target_score = 100
-    # turn_target = 10
-    # last_average = 0
-    # cycles = 0
-    # averages = []
-    # print(pig.piggy_bank()[0])
+    while iteration < iterations:
+        this_game = pig_stats.play_game(100, 9)
+        pig_stats.new_game()
+        averages.append(pig_stats.average(this_game[0]))
+        iteration += 1
+        if iteration % 10000 == 0:
+            print("That's another 10000 iterations done.")
 
-    # avg = pig_stats().average(pig.piggy_bank()[0])
-    # print(str(pig.piggy_bank()[0]))
-    # print(avg)
+    print(pig_stats.average(averages))
