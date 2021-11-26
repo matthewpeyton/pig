@@ -1,4 +1,5 @@
 import random
+
 class pig():
     def __init__(self):
         self.total = 0
@@ -13,8 +14,9 @@ class pig():
         while self.turn_total < target:
             fresh_roll = self.roll(6)
             if fresh_roll == 1:
-                # print('You rolled a 1 and lost '+ str(self.turn_total) + " points")
+                print('You rolled a 1 and lost '+ str(self.turn_total) + " points")
                 self.turn_total = 0
+                self.bank.append(self.turn_total)
             else:
                 self.turn_total = self.turn_total + fresh_roll
         self.piggy_bank(self.turn_total)
@@ -33,29 +35,32 @@ class pig():
     def print_bank(self):
         return self.bank
 
-    def average(self):
-        numerator = 0
-        denominator = len(self.bank)
-        for i in (0,denominator):
-            numerator = numerator + self.bank[i-1]
-        denominator = len(self.bank)
-        avg = numerator / denominator
-        
-        return avg
-
     def reinitialize(self):
         self.total = 0
         self.bank = []
+
+
+class pig_stats():
+    def average(self, list):
+        numerator = 0
+        denominator = len(list)
+        for i in (0, denominator):
+            numerator = numerator + list[i-1]
+        avg = numerator / denominator
+
+        return avg
 
 if __name__ == "__main__":
     pig = pig()
     last_average = 0
     cycles = 0
-    while last_average < 10:
+    averages = []
+    for i in range(1, 100):
+        print(i)
         pig.piggy_total(100,20)
-        last_average = pig.average()
+        averages.append(pig_stats().average(pig.print_bank()))
+        print(pig.print_bank)
         pig.reinitialize()
-        cycles += 1
-    print(last_average)
-    print(cycles)
-    
+    print(str(averages))
+    total_avg = pig_stats().average(averages)
+    print(total_avg)
