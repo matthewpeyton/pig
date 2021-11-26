@@ -33,16 +33,6 @@ class pig_game():
         self.bank = []
         self.current_score = 0
 
-class pig_stats():
-    def average(self, list):
-        numerator = 0
-        denominator = len(list)
-        for i in (0, denominator):
-            numerator = numerator + list[i-1]
-        avg = numerator / denominator
-
-        return avg
-
 if __name__ == "__main__":
     pig = pig_game()
     target_score = 100
