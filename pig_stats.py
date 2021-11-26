@@ -67,15 +67,20 @@ if __name__ == "__main__":
     pig_stats = pig_stats()
 
     averages = []
+    turns = []
     iteration = 0
-    iterations = 100000 # how many games do you want to average out?
+    iterations = int(input("How many games should the bot play?"))
+    target_score = int(input("How many points should the bot go for per turn?"))
 
     while iteration < iterations:
-        this_game = pig_stats.play_game(100, 9)
+        this_game = pig_stats.play_game(100, target_score)
         pig_stats.new_game()
         averages.append(pig_stats.average(this_game[0]))
+        turns.append(len(this_game[0]))
         iteration += 1
         if iteration % 10000 == 0:
-            print("That's another 10000 iterations done.")
+            print("That's " + str(iteration) + " games done.")
 
-    print(pig_stats.average(averages))
+    print("Target score was " + str(target_score))
+    print("Average turn scored " + str(pig_stats.average(averages)) + " points.")
+    print("Average game was " + str(pig_stats.average(turns)) + " turns long")
